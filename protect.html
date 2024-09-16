@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil do Usuário</title>
+</head>
+<body>
+    <h1>Perfil do Usuário</h1>
+    <div id="profileInfo">
+      
+    </div>
+
+    <script>
+        const token = localStorage.getItem('token');
+
+        if (!token) {
+            document.getElementById('profileInfo').innerText = 'Você não está autenticado.';
+        } else {
+            fetch('http://localhost:3000/profile', {
+                method: 'GET',
+                headers: { 'Authorization': `Bearer ${token}` }
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('profileInfo').innerHTML = `
+                    <p>Nome: ${data.firstName} ${data.lastName}</p>
+                    <p>Bio: ${data.bio}</p>
+                `;
+            })
+            .catch(error => {
+                document.getElementById('profileInfo').innerText = 'Erro ao carregar o perfil.';
+                console.error('Erro:', error);
+            });
+        }
+    </script>
+</body>
+</html>

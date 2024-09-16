@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Usuário</title>
+</head>
+<body>
+    <h1>Registrar Novo Usuário</h1>
+    <form id="registerForm">
+        <label for="username">Nome de Usuário:</label>
+        <input type="text" id="username" name="username" required><br><br>
+        <label for="password">Senha:</label>
+        <input type="password" id="password" name="password" required><br><br>
+        <label for="firstName">Primeiro Nome:</label>
+        <input type="text" id="firstName" name="firstName"><br><br>
+        <label for="lastName">Sobrenome Nome:</label>
+        <input type="text" id="lastName" name="lastName"><br><br>
+        <label for="bio">Bio:</label>
+        <textarea id="bio" name="bio"></textarea><br><br>
+        <button type="submit">Registrar</button>
+    </form>
+
+    <div id="message" style="margin-top: 20px;"></div>
+
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const bio = document.getElementById('bio').value;
+
+            fetch('http://localhost:3000/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password, firstName, lastName, bio })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('message').innerText = 'Usuário registrado com sucesso!';
+                document.getElementById('message').style.color = 'green';
+            })
+            .catch(error => {
+                document.getElementById('message').innerText = 'Erro ao registrar o usuário. Tente novamente.';
+                document.getElementById('message').style.color = 'red';
+                console.error('Erro:', error);
+            });
+        });
+    </script>
+</body>
+</html>
